@@ -6,15 +6,11 @@ import Documents from "./pages/Documents";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/tasks" element={<Tasks />} />
-          <Route path="/documents" element={<Documents />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <div className="min-h-screen bg-blue-200 flex items-center justify-center">
+      <h1 className="text-3xl font-bold underline">
+        Hello Tailwind!
+      </h1>
+    </div>
   );
 }
 
