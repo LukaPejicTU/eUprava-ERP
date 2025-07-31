@@ -1,16 +1,33 @@
-import { Link } from "react-router-dom";
+import { AuthService } from "../services/AuthService";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect, use } from "react";
 
 export default function Header() {
+
+  const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsLoggedIn(AuthService.isLoggedIn());
+  }, []);
+  
+  const handleLogout = () => {
+    AuthService.setToken("");
+    setIsLoggedIn(false);
+    navigate("/login"); 
+  }
   return (
-    <header className="bg-white shadow p-4 flex items-center justify-between">
-      <h1 className="text-2xl font-bold text-gray-800">eUprava ERP</h1>
-      <nav className="flex gap-6">
-        <Link to="/" className="inline-block text-green-600 hover:text-blue-800 font-medium">Početna</Link>
-        <Link to="/tasks" className="inline-block text-blue-600 hover:text-blue-800 font-medium">Zadaci</Link>
-        <Link to="/documents" className="inline-block text-blue-600 hover:text-blue-800 font-medium">Dokumenti</Link>
-      </nav>
-
-
+    <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
+      <h1 className="text-xl font-bold">eUprava ERP</h1>
+      { isLoggedIn && (
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 px-4 py-2 rounded hover:bg-red-700"
+        >
+          Odjavi se
+        </button>
+      )}
     </header>
   );
 }

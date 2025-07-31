@@ -43,9 +43,12 @@ INSTALLED_APPS = [
     'documents',
     'rest_framework',
     'tasks',
+    'authuser',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -142,3 +145,5 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
     ]
 }
+
+CORS_ALLOW_ALL_ORIGINS = True  # za razvoj
