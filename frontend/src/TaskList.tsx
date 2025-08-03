@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthService } from "./services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 interface Task {
     id: number;
@@ -11,29 +12,27 @@ interface Task {
 export default function TaskList() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [search, setSearch] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`/api/tasks/?search=${search}`, {
-            headers: {
-                "Authorization": `Bearer ${AuthService.getToken()}`,
-                "Content-Type": "application/json",
-            },
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log("Fetched tasks:", data);
-            // Defensive check: backend might send { detail: ... } when unauthorized
-            if (Array.isArray(data)) {
-                setTasks(data);
-            } else {
-                console.warn("Unexpected response:", data);
-                setTasks([]); // avoid map error
+        async function fetchTasks() {
+            try {
+                const res = await AuthService.authorizedFetch(`/api/tasks/?search=${search}`);
+                const data = await res.json();
+
+                if (Array.isArray(data)) {
+                    setTasks(data);
+                } else {
+                    console.warn("Unexpected response:", data);
+                    setTasks([]);
+                }
+            } catch (err) {
+                console.error("Failed to fetch tasks:", err);
+                navigate("/login"); // Redirect to login on error
             }
-        })
-        .catch((err) => {
-            console.error("Failed to fetch tasks:", err);
-            setTasks([]); // fallback on failure
-        });
+        }
+
+        fetchTasks();
     }, [search]);
 
     return(
