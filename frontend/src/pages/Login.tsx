@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import apiClient from '../apiClient';
+import { AuthService } from '../services/AuthService';
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -11,21 +13,15 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const res = await fetch("http://localhost:8000/api/login/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, password }),
-            });
+            
+            const res = await apiClient.post("/login/", { email, password });
 
-            if (res.ok) {
-                const data = await res.json();
-                localStorage.setItem("token", data.token);
+            if (res.status === 200) {
+                AuthService.setToken(res.data.access);
                 navigate("/"); // Redirect to home on successful login
             } else {
                 alert("Pogrešan email ili lozinka.");
-            } 
+            }
         } catch (error) {
             console.error("Login error:", error);
             alert("Greška prilikom prijave. Pokušajte ponovo kasnije.");

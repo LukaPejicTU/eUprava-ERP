@@ -4,12 +4,13 @@ from .models import Task
 from users.models import CustomUser
 from .serializers import TaskSerializer
 from rest_framework import filters
+from .permissions import IsAdminOrManager
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminOrManager]
 
-    filterset_fields = ['status', 'assingned_to', 'created_by']
+    filterset_fields = ['status', 'assigned_to', 'created_by']
     search_fields = ['title', 'description']
 
     def get_queryset(self):

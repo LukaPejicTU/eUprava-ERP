@@ -16,7 +16,7 @@ class Task(models.Model):
     )
 
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='tasks_created')
-    assingned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='tasks_assigned')
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='tasks_assigned')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -1,10 +1,10 @@
-import axios from "axios"
+import apiClient from "../apiClient"
 import { FormValues } from "../components/TaskForm"
 
 export const TaskService = {
 
     async createTask(task: FormValues): Promise<void> {
-        await axios.post("/api/tasks", task);
+        await apiClient.post("/tasks/", task);
 
     }
 }

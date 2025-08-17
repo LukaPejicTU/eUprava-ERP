@@ -3,6 +3,7 @@ import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Select from 'antd/lib/select';
+import { TaskService } from '../services/taskService';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -17,9 +18,14 @@ export interface FormValues {
 const TaskForm: React.FC = () => {
   const [form] = Form.useForm<FormValues>();
 
-  const onFinish = (values: FormValues) => {
-    console.log('Submitted:', values);
-    form.resetFields();
+  const onFinish = async (values: FormValues) => {
+    try {
+      await TaskService.createTask(values);
+      form.resetFields();
+      console.log('Zadatak uspješno dodan:', values);
+    } catch (error) {
+      console.error('Greška prilikom dodavanja zadatka:', (error as any).response);
+    }
   };
 
   return (
