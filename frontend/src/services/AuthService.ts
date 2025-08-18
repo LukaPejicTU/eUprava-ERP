@@ -13,6 +13,10 @@ export const AuthService = {
         return this.getToken() !== null;
     },
 
+    logout() {
+        localStorage.removeItem("token");
+    },
+
     authorizedFetch(input: RequestInfo, init: RequestInit = {}) {
         const token = this.getToken();
         if (!token) {

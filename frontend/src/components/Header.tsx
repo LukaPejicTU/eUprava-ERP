@@ -13,7 +13,7 @@ export default function Header() {
   }, []);
   
   const handleLogout = () => {
-    AuthService.setToken("");
+    AuthService.logout();
     setIsLoggedIn(false);
     navigate("/login"); 
   }
