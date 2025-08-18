@@ -3,6 +3,7 @@ import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Select from 'antd/lib/select';
+import notification from 'antd/lib/notification';
 import { TaskService } from '../services/taskService';
 import { UserService, User } from '../services/UserService';
 import { useState, useEffect } from 'react';
@@ -39,9 +40,17 @@ const TaskForm: React.FC = () => {
     try {
       await TaskService.createTask(values);
       form.resetFields();
+      notification.success({
+        message: 'Uspješno ste kreirali zadatak!',
+        description: 'Novi zadatak je uspješno kreiran.'
+      });
       console.log('Zadatak uspješno dodan:', values);
     } catch (error) {
       console.error('Greška prilikom dodavanja zadatka:', (error as any).response);
+      notification.error({
+        message: 'Greška',
+        description: 'Došlo je do greške prilikom dodavanja zadatka.'
+      });
     }
   };
 
