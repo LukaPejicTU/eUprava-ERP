@@ -4,6 +4,8 @@ import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Select from 'antd/lib/select';
 import { TaskService } from '../services/taskService';
+import { UserService, User } from '../services/UserService';
+import { useState, useEffect } from 'react';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -16,6 +18,21 @@ export interface FormValues {
 }
 
 const TaskForm: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  // Fetch users when the component mounts
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const userList = await UserService.getAllUsers();
+        setUsers(userList);
+      } catch (error) {
+        console.error('Greška prilikom pribavljanja korisnika:', (error as any).response);
+      }
+    }
+    fetchUsers();
+  }, 
+  []);
+
   const [form] = Form.useForm<FormValues>();
 
   const onFinish = async (values: FormValues) => {
@@ -67,7 +84,14 @@ const TaskForm: React.FC = () => {
         label="ID korisnika" 
         rules={[{ required: true, message: 'ID korisnika je obavezan' }]}
       >
-        <Input type="number" placeholder="Unesite ID" />
+        <Select placeholder="Odaberite korisnika">
+          {users.map(user => (
+            <Option key={user.id} value={user.id}>
+              {user.first_name} {user.last_name} ({user.username})
+            </Option>
+          ))}
+        </Select>
+
       </Form.Item>
 
       <Form.Item>
