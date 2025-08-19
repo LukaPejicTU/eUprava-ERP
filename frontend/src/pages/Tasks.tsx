@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'antd/lib/button';
 import { useNavigate } from 'react-router-dom';
-import TaskList from '../TaskList';
+import TaskList from '../components/TaskList';
 
 const TasksPage = () => {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ const TasksPage = () => {
   return (
     <div style={{ padding: '2rem' }}>
 
-      
+
 
       <TaskList />
       <Button type="primary" onClick={() => navigate('/tasks/create')} style={{ marginBottom: '1rem' }}>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AuthService } from "./services/AuthService";
+import { AuthService } from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 
 interface Task {
@@ -7,6 +7,7 @@ interface Task {
     title: string;
     description: string;
     status: string;
+    assigned_to_fullname: string;
 }
 
 export default function TaskList() {
@@ -37,7 +38,7 @@ export default function TaskList() {
 
     return(
         <div className="p-6 max-w-3xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Task Lista</h1>
+            <h1 className="text-2xl font-bold mb-4">Lista Zadataka</h1>
             <input
                 type="text"
                 placeholder="Pretraži taskove..."
@@ -45,23 +46,14 @@ export default function TaskList() {
                 onChange={(e) => setSearch(e.target.value)}
                 className="border px-3 py-2 w-full mb-4 rounded"
             />
-            <ul className="space-y-3">
-                {tasks.map((task) => (
-                    <li key={task.id} className="p-4 border rounded shadow">
-                        <h2 className="text-xl font-semibold">{task.title}</h2>
-                        <p>{task.description}</p>
-                        <p className="text-sm text-gray-600">Status: {task.status}</p>
-                    </li>
-                ))}
-            </ul>
             {tasks.length === 0 ? (
                 <div className="text-red-600">Nije pronađen nijedan zadatak.</div>
             ) : (
                 <ul className="space-y-3">
                     {tasks.map((task) => (
                         <li key={task.id} className="p-4 border rounded shadow">
-                            <h2 className="text-xl font-semibold">{task.title}</h2>
-                            <p>{task.description}</p>
+                            <h2 className="text-xl text-blue-600 font-semibold">{task.title}</h2>
+                            <p className="text-sm text-gray-600">Assigned to: {task.assigned_to_fullname}</p>
                             <p className="text-sm text-gray-600">Status: {task.status}</p>
                         </li>
                     ))}
