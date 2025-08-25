@@ -19,7 +19,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             return Task.objects.all()
         elif user.role == CustomUser.Role.MANAGER:
             subordinates = CustomUser.objects.filter(manager=user)
-            return Task.objects.filter(assigned_to__in=subordinates) | Task.objects.filter(created_by=user)
+            return Task.objects.filter(assigned_to=user) | Task.objects.filter(created_by=user) | Task.objects.filter(assigned_to__in=subordinates)
         else:
             return Task.objects.filter(assigned_to=user)
         
