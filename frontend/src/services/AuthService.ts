@@ -1,3 +1,5 @@
+import apiClient from "../apiClient";
+import { User } from "./UserService";
 
 export const AuthService = {
 
@@ -31,6 +33,10 @@ export const AuthService = {
             ...init,
             headers,
         });
-    }
+    },
 
+    async getMe(): Promise<User> {
+        const respone = await apiClient.get("/me/");
+        return respone.data;
+    }
 }
