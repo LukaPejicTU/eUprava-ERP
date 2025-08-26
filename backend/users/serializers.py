@@ -8,6 +8,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         # We only need the ID to submit the form, and the username for display.
-        fields = ['id', 'username', 'first_name', 'last_name']
+        fields = ['id', 'username', 'first_name', 'last_name', 'role']
 
 

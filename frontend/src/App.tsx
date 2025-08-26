@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import AppLayout from "./AppLayout";
 import Home from "./pages/Home";
-import Tasks from "./pages/Tasks";
+import Tasks from "./pages/TasksPage";
 import Documents from "./pages/Documents";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
