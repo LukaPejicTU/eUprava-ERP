@@ -18,7 +18,7 @@ const TasksPage = () => {
 
 
       <TaskList />
-      {user && (user.role === 'admin' || user.role === 'manager') && (
+      {user && (user.role === 'admin' || user.has_subordinates) && (
       <Button type="primary" onClick={() => navigate('/tasks/create')} style={{ marginBottom: '1rem' }}>
         Dodaj zadatak
       </Button>

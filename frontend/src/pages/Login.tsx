@@ -18,7 +18,7 @@ export default function Login() {
 
             if (res.status === 200) {
                 AuthService.setToken(res.data.access);
-                navigate("/"); // Redirect to home on successful login
+                window.location.href = "/";
             } else {
                 alert("Pogrešan email ili lozinka.");
             }

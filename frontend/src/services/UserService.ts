@@ -6,6 +6,7 @@ export interface User {
     first_name: string;
     last_name: string;
     role: 'admin' | 'manager' | 'worker';
+    has_subordinates: boolean;
   }
 
 export const UserService = {

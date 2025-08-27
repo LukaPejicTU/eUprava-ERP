@@ -15,7 +15,7 @@ export default function Header() {
   const handleLogout = () => {
     AuthService.logout();
     setIsLoggedIn(false);
-    navigate("/login"); 
+    window.location.href = "/login";
   }
   return (
     <header className="bg-gray-800 text-white p-4 flex justify-between items-center">

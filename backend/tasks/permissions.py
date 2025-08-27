@@ -12,4 +12,4 @@ class IsAdminOrManager(permissions.BasePermission):
             return request.user and request.user.is_authenticated
         
         # For unsafe requests (POST, PUT, DELETE), check if the user is admin or manager
-        return request.user and (request.user.is_admin() or request.user.is_manager())
+        return request.user and (request.user.is_admin() or request.user.has_subordinates())
