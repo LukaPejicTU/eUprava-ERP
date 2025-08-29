@@ -1,35 +1,44 @@
+# in users/admin.py
+
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.hashers import make_password
 from .models import CustomUser
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 @admin.register(CustomUser)
-class CustomUserAdmin(UserAdmin):
-    # This defines the columns shown in the list of users
-    list_display = ('email', 'username', 'first_name', 'last_name', 'role', 'is_staff')
+class CustomUserAdmin(admin.ModelAdmin):
+    # Use our custom forms
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
     
-    # This defines the layout for the "Edit User" page
-    fieldsets = (
-        # Section 1: Login Credentials (email is primary)
-        (None, {'fields': ('email', 'password')}),
-        
-        # Section 2: Personal & Role Information
-        ('Personal & Role Info', {'fields': ('username', 'first_name', 'last_name', 'role', 'manager')}),
-        
-        # Section 3: Standard Django Permissions
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        
-        # Section 4: Important Dates
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
-    )
+    # The model we are administering
+    model = CustomUser
+
+    # Display columns in the user list
+    list_display = ('email', 'username', 'first_name', 'last_name', 'role', 'manager', 'is_staff')
+    list_filter = ('role', 'manager', 'is_staff', 'is_superuser')
     
-    # This defines the fields for the "Add User" page
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            # 'username' is required here because it's in your REQUIRED_FIELDS
-            'fields': ('email', 'username', 'password', 'password2', 'role'),
-        }),
-    )
+    # Define the fields shown on the 'add' and 'change' pages
+    # For the 'add' page, it will use the fields from 'add_form'
+    # For the 'change' page, it will use the fields from 'form'
     
     search_fields = ('email', 'username')
     ordering = ('email',)
+
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Use special form for user creation
+        """
+        defaults = {}
+        if obj is None:
+            defaults['form'] = self.add_form
+        defaults.update(kwargs)
+        return super().get_form(request, obj, **defaults)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Hash the password when saving a user in the admin.
+        """
+        if obj.password and not obj.password.startswith(('pbkdf2_sha256$', 'bcrypt$', 'argon2')):
+            obj.password = make_password(obj.password)
+        super().save_model(request, obj, form, change)
