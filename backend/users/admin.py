@@ -7,20 +7,14 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    # Use our custom forms
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     
-    # The model we are administering
     model = CustomUser
 
     # Display columns in the user list
     list_display = ('email', 'username', 'first_name', 'last_name', 'role', 'manager', 'is_staff')
     list_filter = ('role', 'manager', 'is_staff', 'is_superuser')
-    
-    # Define the fields shown on the 'add' and 'change' pages
-    # For the 'add' page, it will use the fields from 'add_form'
-    # For the 'change' page, it will use the fields from 'form'
     
     search_fields = ('email', 'username')
     ordering = ('email',)
