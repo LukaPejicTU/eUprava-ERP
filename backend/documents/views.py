@@ -19,7 +19,8 @@ class DocumentViewSet(viewsets.ModelViewSet):
             return Document.objects.all()
         elif user.role == CustomUser.Role.MANAGER:
             subordinates = CustomUser.objects.filter(manager=user)
-            return Document.objects.filter(uploaded_by__in[user] + list(subordinates))
+            users_to_include = [user] + list(subordinates)
+            return Document.objects.filter(uploaded_by__in=users_to_include)
         else:
             return Document.objects.filter(uploaded_by=user)
             
