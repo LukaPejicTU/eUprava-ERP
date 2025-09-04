@@ -1,11 +1,11 @@
 import apiClient from "../apiClient";
 
 export interface Document {
-    id: string;
+    id: number;
     title: string;
     file: string;
     upload_date: string;
-    uploaded_by: number;
+    uploaded_by_username: string;
 }
 
 export const DocumentService = {

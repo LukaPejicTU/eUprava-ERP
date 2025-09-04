@@ -45,7 +45,7 @@ export default function DocumentList() {
                             <a href={document.file} target="_blank" rel="noopener noreferrer">
                                 <h2 className="text-xl text-blue-600 font-semibold">{document.title}</h2>
                             </a>
-                            <p className="text-sm text-gray-600">Uploadovao: {document.uploaded_by}</p>
+                            <p className="text-sm text-gray-600">Uploadovao: {document.uploaded_by_username}</p>
                         </li>
                     ))}
                 </ul>
