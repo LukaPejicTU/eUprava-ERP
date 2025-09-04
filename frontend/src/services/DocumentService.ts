@@ -9,8 +9,8 @@ export interface Document {
 }
 
 export const DocumentService = {
-    async getDocuments(): Promise<Document[]> {
-        const response = await apiClient.get("/documents/");
+    async getDocuments(search?: string): Promise<Document[]> {
+        const response = await apiClient.get("/documents/", {params: { search }});
         return response.data;
     }
 }
