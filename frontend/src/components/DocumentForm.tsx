@@ -11,7 +11,11 @@ export interface FormValues {
     file: File;
 }
 
-const DocumentForm: React.FC = () => {
+interface DocumentFormProps {
+    onUploadSuccess: () => void;
+}
+
+const DocumentForm: React.FC<DocumentFormProps> = ({ onUploadSuccess }) => {
     
 
     const [form] = Form.useForm<FormValues>();
@@ -36,6 +40,8 @@ const DocumentForm: React.FC = () => {
                 description: 'Dokument je uspješno dodan.'
             });
             form.resetFields();
+
+            onUploadSuccess();
 
         } catch (error) {
             notification.error({
