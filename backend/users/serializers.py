@@ -20,3 +20,13 @@ class UserSerializer(serializers.ModelSerializer):
             'obj' here is the user instance being serialized.
             """
             return obj.has_subordinates()
+    
+
+class DashboardTaskSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField(max_length=255)
+    status = serializers.CharField(max_length=255)
+
+class DashboardSerializer(serializers.Serializer):
+    my_open_tasks_count = serializers.IntegerField()
+    recent_tasks = DashboardTaskSerializer(many=True)
