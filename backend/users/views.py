@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from .models import CustomUser
 from .serializers import UserSerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
+from tasks.models import Task
+from .serializers import DashboardSerializer
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
 	serializer_class = UserSerializer
@@ -25,3 +28,34 @@ def current_user_profile(request):
     """
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+
+
+class DashboardView(APIView):
+
+	permission_classes = [permissions.IsAuthenticated]
+
+	def get(self, request):
+		user = request.user
+
+		my_open_tasks_count = Task.objects.filter(
+			assigned_to = user
+		).exclude(
+			status = Task.Status.COMPLETED
+		).count()
+
+		recent_tasks = Task.objects.filter(
+			assigned_to = user
+		).exclude(
+			status = Task.Status.COMPLETED
+		).order_by(
+			'-created_at'
+		)[:5]
+		
+		data = {
+			'my_open_tasks_count' : my_open_tasks_count,
+			'recent_tasks' : recent_tasks
+		}
+
+		serializer = DashboardSerializer(instance=data)
+		return Response(serializer.data)
+		
