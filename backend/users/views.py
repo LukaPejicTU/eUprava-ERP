@@ -7,8 +7,12 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from tasks.models import Task
 from .serializers import DashboardSerializer
+from .permissions import IsAdminUser
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
+
+	permission_classes = [IsAdminUser]
+
 	serializer_class = UserSerializer
 
 	def get_queryset(self):
