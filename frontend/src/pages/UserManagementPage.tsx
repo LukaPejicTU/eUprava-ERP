@@ -1,4 +1,5 @@
-import { Table, Button } from 'antd';
+import { Table } from 'antd';
+import Button from 'antd/es/button';
 import type { ColumnsType } from 'antd/es/table';
 import { useState, useEffect } from "react";
 import { UserService } from "../services/UserService";
@@ -17,6 +18,20 @@ const UserManagementPage = () => {
             title: 'Email',
             dataIndex: 'email',
             key: 'email'
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (text, record) => (
+                <span>
+                    <Button onClick={() => console.log('Edit user:', record.id)}>
+                        Izmjeni
+                    </Button>
+                    <Button danger onClick={() => console.log('Delete user:', record.id)} style={{ marginLeft: 8 }}>
+                        Obriši
+                    </Button>
+                </span>
+            )
         },
     ];
 
