@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { notification, Table } from 'antd';
 import Button from 'antd/es/button';
 import type { ColumnsType } from 'antd/es/table';
 import { useState, useEffect } from "react";
@@ -27,7 +27,7 @@ const UserManagementPage = () => {
                     <Button onClick={() => console.log('Edit user:', record.id)}>
                         Izmjeni
                     </Button>
-                    <Button danger onClick={() => console.log('Delete user:', record.id)} style={{ marginLeft: 8 }}>
+                    <Button danger onClick={() => handleDelete(record)} style={{ marginLeft: 8 }}>
                         Obriši
                     </Button>
                 </span>
@@ -35,19 +35,34 @@ const UserManagementPage = () => {
         },
     ];
 
-    useEffect(() => {
-        const fetchData  = async () => {
-            try {
-                const data = await UserService.getAllUsers();
-                if (data != null) {
-                    setUsers(data); 
-                }
-            } catch (err) {
-                console.error("Failed to fetch User data.")
+    const fetchData  = async () => {
+        try {
+            const data = await UserService.getAllUsers();
+            if (data != null) {
+                setUsers(data); 
             }
-        };
+        } catch (err) {
+            console.error("Failed to fetch User data.")
+        }
+    };
+
+    useEffect(() => {
         fetchData();
     }, []);
+
+    const handleDelete = async (userToDelete: User) => {
+        if (window.confirm(`Da li sigurno želite obrisati ${userToDelete.username}?`)) {
+            try {
+                await UserService.deleteUser(userToDelete.id);
+
+                notification.success({ message: 'User deleted', description:'' });
+                fetchData();
+            } catch (error) {
+                notification.error({ message: 'Failed to delete user', description: '' });
+                console.error("Delete error:", error);
+            }
+        }
+    }
 
     return (
         <div className="p-6">
