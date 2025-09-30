@@ -1,7 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
 
 export default function Sidebar() {
     const location = useLocation();
+    const { user } = useUser();
+
     const linkClass = (path: string) =>
         `block px-4 py-2 rounded hover:bg-gray-700 ${
       location.pathname === path ? "bg-gray-800 text-white" : "text-gray-300"
@@ -13,6 +16,11 @@ export default function Sidebar() {
                 <Link to="/" className={linkClass('/')}>Home</Link>
                 <Link to="/tasks" className={linkClass('/tasks')}>Tasks</Link>
                 <Link to="/documents" className={linkClass('/documents')}>Documents</Link>
+                {user && user.role ==='admin' && (
+                    <Link to="/admin/users" className={linkClass('/admin/users')}>
+                        Upravljanje korisnicima
+                    </Link>
+                )}
             </nav>
         </aside>
     );
