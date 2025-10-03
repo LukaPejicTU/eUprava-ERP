@@ -8,6 +8,8 @@ from rest_framework.decorators import api_view
 from tasks.models import Task
 from .serializers import DashboardSerializer
 from .permissions import IsAdminUser
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 class UserViewSet(viewsets.ModelViewSet):
 
@@ -26,6 +28,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def current_user_profile(request):
     """
     Returns the details of the currently authenticated user.
