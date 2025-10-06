@@ -33,3 +33,11 @@ class CustomUser(AbstractUser):
     
     def has_subordinates(self):
         return self.subordinates.exists()
+
+    def save(self, *args, **kwargs):
+        if self.manager:
+            if self.manager.role == self.Role.WORKER:
+                self.manager.role = self.Role.MANAGER
+                self.manager.save()
+        
+        super().save(*args, **kwargs)
