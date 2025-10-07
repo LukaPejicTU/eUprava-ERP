@@ -2,7 +2,7 @@ import { User, UserData, UserService } from "../services/UserService";
 import Form from 'antd/lib/form';
 import Input from "antd/lib/input";
 import Select from 'antd/lib/select';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import notification from "antd/lib/notification";
 import Button from "antd/lib/button";
 import { Space } from "antd/lib";
@@ -19,15 +19,27 @@ export interface UserFormProps {
 const UserForm: React.FC<UserFormProps> = ({ initialValues, onSuccess, onCancel }) => {
 
     const [form] = Form.useForm();
+
+    const [userList, setUserList] = useState<User[]>([]);
     
     useEffect(() => {
+        const fetchUserList = async () => {
+            try {
+                const users = await UserService.getAllUsers();
+                setUserList(users);
+            } catch (error) {
+                console.error("Failed to fetch user list for form", error);
+            }
+        };
+        fetchUserList();
+
         if (initialValues) {
             form.setFieldsValue(initialValues);
         } else {
             form.resetFields();
         }
     },
-    [initialValues]);
+    [initialValues, form]);
 
     const onFinish = async (values: UserData) => {
         try{
@@ -107,6 +119,19 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSuccess, onCancel 
                     <Button onClick={onCancel}>Otkaži</Button>
                 </Space>
             </Form.Item>
+            <Form.Item
+                name="manager"
+                label="Menadžer"
+            >
+                <Select placeholder="Odaberite menadžera" allowClear>
+                    {userList.map(user => (
+                        <Option key={user.id} value={user.id}>
+                            {user.first_name} {user.last_name} ({user.username})
+                        </Option>
+                    ))}
+                </Select>
+            </Form.Item>
+
         </Form>
     )
 }
